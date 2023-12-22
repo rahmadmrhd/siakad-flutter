@@ -133,41 +133,61 @@ class _NilaiPageState extends State<NilaiPage> {
                           ),
                           columns: const [
                             DataColumn(
-                              label: Text(
-                                'No',
-                                style: TextStyle(color: Colors.white),
+                              label: Expanded(
+                                child: Text(
+                                  'No',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               ),
                               numeric: true,
                             ),
                             DataColumn(
-                              label: Text(
-                                'Kode',
-                                style: TextStyle(color: Colors.white),
+                              label: Expanded(
+                                child: Text(
+                                  'Kode',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               ),
                             ),
                             DataColumn(
-                              label: Text(
-                                'Mata Kuliah',
-                                style: TextStyle(color: Colors.white),
+                              label: Expanded(
+                                child: Text(
+                                  'Mata Kuliah',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
                               ),
                             ),
                             DataColumn(
-                              label: Text(
-                                'Semester',
-                                style: TextStyle(color: Colors.white),
+                              label: Expanded(
+                                child: Text(
+                                  'Semester',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               ),
                               numeric: true,
                             ),
                             DataColumn(
-                              label: Text(
-                                'Nilai',
-                                style: TextStyle(color: Colors.white),
+                              label: Expanded(
+                                child: Text(
+                                  'Nilai',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               ),
                             ),
                             DataColumn(
-                              label: Text(
-                                'Predikat',
-                                style: TextStyle(color: Colors.white),
+                              label: Expanded(
+                                child: Text(
+                                  'Predikat',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               ),
                             ),
                           ],

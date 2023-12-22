@@ -9,7 +9,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  mysql1: ^0.20.0
   mysql_client: ^0.0.27
   shared_preferences: ^2.2.2
 

@@ -1,4 +1,3 @@
-// import 'package:mysql1/mysql1.dart';
 import 'package:mysql_client/mysql_client.dart';
 
 class MyDb {
@@ -15,6 +14,6 @@ class MyDb {
     password: _password,
     databaseName: _db,
     maxConnections: 10,
-    timeoutMs: 1000,
+    timeoutMs: 5000,
   );
 }
