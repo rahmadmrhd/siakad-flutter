@@ -3,7 +3,7 @@
 ///
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:siakad/src/page/login_page.dart';
+import 'package:siakad/src/pages/login_page.dart';
 
 import '../components/error_dialog.dart';
 import '../utils/database.dart';
@@ -24,10 +24,17 @@ class _ProfilePageState extends State<ProfilePage> {
     data = getUser();
   }
 
+  //mengambil data user dari database
   Future<dynamic> getUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
-    if (token == null) return null;
+    //jika tidak ada token, maka akan diarahkan ke halaman login
+    if (token == null) {
+      if (!mounted) return null;
+      Navigator.pushReplacementNamed(context, LoginPage.routeName);
+      await prefs.remove('token');
+      return null;
+    }
 
     final result = await MyDb.pool.execute(
         'SELECT nim, nama, jenis_kelamin, tempat_Lahir, tanggal_Lahir, ipk, semester, jurusan FROM `user` WHERE token = :token',
@@ -103,12 +110,14 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    //menampilkan data user
     return FutureBuilder(
       future: data,
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
+          //menampilkan pesan error
           return ErrorDialog(
             onTry: () {
               setState(() {
@@ -143,6 +152,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         top: 50, left: 10, right: 10, bottom: 25),
                     child: Column(
                       children: [
+                        //header
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -204,6 +214,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ],
                     ),
                   ),
+                  //menampilkan informasi user
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 36),
@@ -278,6 +289,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                           const SizedBox(height: 8),
+                          //tombol logout
                           GestureDetector(
                             onTap: () => logout(context),
                             child: const ListTile(

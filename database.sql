@@ -109,50 +109,15 @@ VALUES (
 ('000202', 'PENDIDIKAN AGAMA ISLAM', 'S', NULL);
 
 INSERT INTO `matkul_mhs`
-VALUES (
-        '1462200017',
-        '002102',
-        3,
-        0.65,
-        88
-    ), (
-        '1462200017',
-        '14620113',
-        3,
-        0.7,
-        85
-    ), ('1462200017', '14620233',
-    3, 1, 90), (
-        '1462200017',
-        '14620133',
-        3,
-        0.45,
-        70
-    ), (
-        '1462200017',
-        '14620144',
-        3,
-        0.95,
-        75
-    ), (
-        '1462200017',
-        '14620154',
-        3,
-        0.75,
-        55
-    ), (
-        '1462200017',
-        '14620123',
-        3,
-        0.70,
-        68
-    ), (
-        '1462200017',
-        '14620382',
-        3,
-        0.80,
-        82
-    ),
+VALUES 
+('1462200017', '002102', 3, 0.65, 88), 
+('1462200017', '14620113', 3, 0.7, 85),
+('1462200017', '14620233', 3, 1, 90),
+('1462200017', '14620133', 3, 0.45, 70),
+('1462200017', '14620144', 3, 0.95, 75),
+('1462200017', '14620154', 3, 0.75, 55),
+('1462200017', '14620123', 3, 0.70, 68),
+('1462200017', '14620382', 3, 0.80, 82),
 ('1462200017', '14620023', 1, 1, 90),
 ('1462200017', '14620094', 2, 1, 65),
 ('1462200017', '14620063', 2, 1, 75),
@@ -217,32 +182,27 @@ END $$;
 
 DELIMITER;
 
--- SELECT * FROM USER;
-
-
 CREATE OR REPLACE VIEW `nilai_mhs` AS SELECT matkul.`kode`, matkul.`nama`, `n`.`semester`, `n`.`nilai`,
 CASE 
-  WHEN `n`.`nilai` > 100 THEN 'Not Valid'
-  WHEN `n`.`nilai` >= 85 THEN 'A'
-  WHEN `n`.`nilai` >= 80 THEN 'A-'
-  WHEN `n`.`nilai` >= 75 THEN 'AB'
-  WHEN `n`.`nilai` >= 70 THEN 'B+'
-  WHEN `n`.`nilai` >= 65 THEN 'B'
-  WHEN `n`.`nilai` >= 60 THEN 'B-'
-  WHEN `n`.`nilai` >= 55 THEN 'BC'
-  WHEN `n`.`nilai` >= 50 THEN 'C+'
-  WHEN `n`.`nilai` >= 45 THEN 'C'
-  WHEN `n`.`nilai` >= 40 THEN 'C-'
-  WHEN `n`.`nilai` >= 35 THEN 'CD'
-  WHEN `n`.`nilai` >= 30 THEN 'D'
-  WHEN `n`.`nilai` >= 0 THEN 'E'
-  ELSE 'Not Valid'
+    WHEN `n`.`nilai` > 100 THEN 'Not Valid'
+    WHEN `n`.`nilai` >= 85 THEN 'A'
+    WHEN `n`.`nilai` >= 80 THEN 'A-'
+    WHEN `n`.`nilai` >= 75 THEN 'AB'
+    WHEN `n`.`nilai` >= 70 THEN 'B+'
+    WHEN `n`.`nilai` >= 65 THEN 'B'
+    WHEN `n`.`nilai` >= 60 THEN 'B-'
+    WHEN `n`.`nilai` >= 55 THEN 'BC'
+    WHEN `n`.`nilai` >= 50 THEN 'C+'
+    WHEN `n`.`nilai` >= 45 THEN 'C'
+    WHEN `n`.`nilai` >= 40 THEN 'C-'
+    WHEN `n`.`nilai` >= 35 THEN 'CD'
+    WHEN `n`.`nilai` >= 30 THEN 'D'
+    WHEN `n`.`nilai` >= 0 THEN 'E'
+    ELSE 'Not Valid'
 END as 'predikat',
 `u`.token
 FROM `user` AS u
     LEFT JOIN `matkul_mhs` AS `n` ON `u`.`nim` = `n`.`nim`
     LEFT JOIN `mata_kuliah` AS `matkul` ON `n`.`kode` = `matkul`.`kode`;
 
-SELECT * FROM `nilai_mhs` WHERE
-    token = '01410aee-9f2a-11ee-b32f-4cedfb01a0fa';
 

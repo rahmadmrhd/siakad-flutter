@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:siakad/src/utils/database.dart';
 
-import 'src/page/home_page.dart';
-import 'src/page/login_page.dart';
+import 'src/pages/home_page.dart';
+import 'src/pages/login_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +20,6 @@ Future<String> getInitialRoute() async {
     final result = await MyDb.pool.execute(
         'SELECT count(*) as count FROM `user` WHERE token = :token',
         {"token": token});
-    // print(result);
     if (result.rows.first.colByName('count') == '0') {
       return LoginPage.routeName;
     }

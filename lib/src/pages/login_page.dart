@@ -1,10 +1,7 @@
-/// Rahmad Maulana
-/// 1462200017
-///
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:siakad/src/page/home_page.dart';
+import 'package:siakad/src/pages/home_page.dart';
 import 'package:siakad/src/utils/database.dart';
 
 import '../components/loading_dialog.dart';
@@ -36,6 +33,7 @@ class _LoginPageState extends State<LoginPage> {
       if (!mounted) return;
       if (token == null) {
         Navigator.pop(context); //close loading
+        // menampilakan dialog ketika login gagal
         dialogResult(context, false, 'NIM atau Password salah!!!');
         return;
       }
@@ -46,14 +44,17 @@ class _LoginPageState extends State<LoginPage> {
 
       if (!mounted) return;
       Navigator.pop(context); //close loading
+      //pindah ke halaman home
       Navigator.pushReplacementNamed(context, HomePage.routeName);
       return;
     } catch (e) {
-      Navigator.pop(context);
+      Navigator.pop(context); //close loading
+      // menampilakan dialog ketika login gagal
       dialogResult(context, false, 'Terjadi Kesalahan, Silahkan coba lagi!');
     }
   }
 
+  //fungsi menampilkan dialog
   void dialogResult(BuildContext context, bool isSuccess, String msg) {
     showDialog(
       context: context,
@@ -73,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  //validasi textfield
+  //validasi textfield tidak boleh kosong
   String? validatorNotEmpty(String? value) {
     if (value == null || value.isEmpty) {
       return 'Tidak Boleh Kosong';
@@ -111,6 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(fontSize: 24, color: Colors.grey[800]!),
                 ),
                 const SizedBox(height: 42),
+                //form login
                 Form(
                   key: _formKey,
                   child: Column(
@@ -180,6 +182,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             minimumSize: const Size.fromHeight(50)),
                         onPressed: () {
+                          //memvalidasi input
                           final valid = _formKey.currentState!.validate();
                           if (!valid) return;
                           loadingDialog(context);

@@ -1,5 +1,6 @@
 import 'package:mysql_client/mysql_client.dart';
 
+// setup database
 class MyDb {
   static const String _host = "192.168.95.117";
   static const String _user = "admin";

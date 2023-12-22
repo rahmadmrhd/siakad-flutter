@@ -21,10 +21,18 @@ class _MataKuliahPageState extends State<MataKuliahPage> {
     data = getMatkul();
   }
 
+  //mengambil data dari database
   Future<List<dynamic>> getMatkul() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
-    if (token == null) return [];
+
+    //jika tidak ada token, maka akan diarahkan ke halaman login
+    if (token == null) {
+      if (!mounted) return [];
+      Navigator.pushReplacementNamed(context, LoginPage.routeName);
+      await prefs.remove('token');
+      return [];
+    }
 
     final result = await MyDb.pool.execute('''SELECT `matkul`.`kode`,
       `matkul`.`nama`,
@@ -38,9 +46,6 @@ class _MataKuliahPageState extends State<MataKuliahPage> {
     token = :token''', {"token": token});
 
     if (result.rows.isEmpty) {
-      if (!mounted) return [];
-      Navigator.pushReplacementNamed(context, LoginPage.routeName);
-      await prefs.remove('token');
       return [];
     }
 
@@ -67,6 +72,7 @@ class _MataKuliahPageState extends State<MataKuliahPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 18),
+            // header
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -103,6 +109,8 @@ class _MataKuliahPageState extends State<MataKuliahPage> {
                   fontSize: 42, fontWeight: FontWeight.bold, letterSpacing: -2),
             ),
             Divider(thickness: 1, color: Colors.grey[300]),
+
+            //menampilkan hasil data mata kuliah dari database
             Expanded(
               child: FutureBuilder(
                 future: data,
@@ -110,6 +118,7 @@ class _MataKuliahPageState extends State<MataKuliahPage> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
+                    //menampilkan pesan error
                     return ErrorDialog(
                       onTry: () {
                         setState(() {
@@ -119,6 +128,7 @@ class _MataKuliahPageState extends State<MataKuliahPage> {
                       msgError: snapshot.error.toString(),
                     );
                   } else {
+                    //menampilkan data
                     final listMatkul = snapshot.data;
                     return RefreshIndicator(
                       onRefresh: () async {

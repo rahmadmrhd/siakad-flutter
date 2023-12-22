@@ -19,19 +19,22 @@ class _NilaiPageState extends State<NilaiPage> {
     data = getMatkul();
   }
 
+  //mengambil data dari database
   Future<List<dynamic>> getMatkul() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
-    if (token == null) return [];
+    if (token == null) {
+      if (!mounted) return [];
+      Navigator.pushReplacementNamed(context, LoginPage.routeName);
+      await prefs.remove('token');
+      return [];
+    }
 
     final result = await MyDb.pool.execute(
         'SELECT * FROM `nilai_mhs` WHERE token = :token ORDER BY `semester` DESC, `kode` ASC',
         {"token": token});
 
     if (result.rows.isEmpty) {
-      if (!mounted) return [];
-      Navigator.pushReplacementNamed(context, LoginPage.routeName);
-      await prefs.remove('token');
       return [];
     }
 
@@ -58,6 +61,7 @@ class _NilaiPageState extends State<NilaiPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 18),
+            // header
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -94,6 +98,8 @@ class _NilaiPageState extends State<NilaiPage> {
                   fontSize: 42, fontWeight: FontWeight.bold, letterSpacing: -2),
             ),
             Divider(thickness: 1, color: Colors.grey[300]),
+
+            //menampilkan hasil data dari database ke dalam bentuk tabel
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () async {
@@ -107,6 +113,7 @@ class _NilaiPageState extends State<NilaiPage> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
                     } else if (snapshot.hasError) {
+                      //menampilkan pesan error
                       return ErrorDialog(
                         onTry: () {
                           setState(() {
@@ -116,6 +123,7 @@ class _NilaiPageState extends State<NilaiPage> {
                         msgError: snapshot.error.toString(),
                       );
                     } else {
+                      //menampilkan data
                       final listMatkul = snapshot.data;
 
                       return SingleChildScrollView(
@@ -131,6 +139,7 @@ class _NilaiPageState extends State<NilaiPage> {
                             verticalInside:
                                 BorderSide(color: Colors.grey[300]!),
                           ),
+                          //inialisasi kolom pada tabel
                           columns: const [
                             DataColumn(
                               label: Expanded(
